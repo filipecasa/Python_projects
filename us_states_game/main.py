@@ -27,10 +27,7 @@ while len(correct_answer) < 50:
     x,y = states[states.state == answer_state].x.to_string(index=False),\
           states[states.state == answer_state].y.to_string(index=False)
     if answer_state == "Exit" or answer_state == "Quit":
-        missing_states = []
-        for state in states_list:
-            if state not in correct_answer:
-                missing_states.append(state)
+        missing_states = [state for state in states_list if state not in correct_answer]
         # print(missing_states)
         states_to_learn = pd.DataFrame(missing_states)
         states_to_learn.to_csv("states_to_learn.csv")
@@ -42,6 +39,4 @@ while len(correct_answer) < 50:
         t.penup()
         t.goto(int(x), int(y))
         t.write(answer_state)
-
-
 
