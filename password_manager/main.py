@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -34,22 +35,54 @@ def save():
     website = website_entry.get()
     email = email_entry.get()
     password = password_entry.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+        }
+    }
 
-
-    if website == "" or password == "":
+    if len(website) == 0 or len(password) == 0:
     # if len(website) == 0
         messagebox.askokcancel(title="Oops", message="Please don't leave any fields empty!")
     # messagebox.showinfo(title="Title", message="Message")
 
     else:
-        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: \nEmail: {email}\n"
-                                                              f"Passoword: {password}\nIs it ok to save?")
-        if is_ok:
-            with open("data.txt", "a") as data:
-                data.write(f"{website} | {email} | {password}\n")
-                website_entry.delete(0, END)
-                password_entry.delete(0, END)
+        try:
+            with open("data.json", "r") as data_file:
+                # Reading old data
+                data = json.load(data_file)
+                # Updating old data with new data
+                data.update(new_data)
+        except FileNotFoundError:
+            data = new_data
+        finally:
+            with open("data.json", "w") as data_file:
+                # Saving updated data
+                json.dump(data, data_file, indent=4)
 
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
+
+# ---------------------------- FIND PASSWORD ------------------------------- #
+
+def find_password():
+    website = website_entry.get().title()
+
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+            # print(data)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No Data File Found!")
+    else:
+        try:
+            email = data[website]['email']
+            password = data[website]['password']
+            pyperclip.copy(password)
+            messagebox.showinfo(title=website, message=f"Email: {email}\nPassword: {password}")
+        except KeyError:
+            messagebox.showinfo(title=f"Error! {website} not found!", message=f"No details for {website} exists!")
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -72,8 +105,8 @@ password_label = Label(text="Password:")
 password_label.grid(column=0, row=3)
 
 # Entries
-website_entry = Entry(width=53)
-website_entry.grid(column=1, row=1, columnspan=2)
+website_entry = Entry(width=34)
+website_entry.grid(column=1, row=1)
 website_entry.focus()
 email_entry = Entry(width=53)
 email_entry.grid(column=1, row=2, columnspan=2)
@@ -86,7 +119,8 @@ generate_password_button = Button(text="Generate Password", command=generate_pas
 generate_password_button.grid(column=2, row=3)
 add_button = Button(text="Add", width=45, command=save)
 add_button.grid(column=1, row=4, columnspan=2)
-
+search_button = Button(text="Search", width=15, command=find_password)
+search_button.grid(column=2, row=1)
 
 
 
