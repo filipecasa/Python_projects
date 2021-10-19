@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 USERNAME = "your username"
 TOKEN = "your token"
@@ -36,9 +37,14 @@ headers = {
 # print(response.text)
 
 pixel_endpoint = f"{graph_endpoint}/{GRAPH_ID}"
+
+today = datetime.now()
+# print(today.strftime("%Y%m%d"))
+distance_km = 1.1 # amount of km as a float ex: 1.1"
+
 pixel_config = {
-    "date": "date",
-    "quantity": "amount of km as a float ex: 1.1",
+    "date": today.strftime("%Y%m%d"),
+    "quantity": f"{distance_km}",
 }
 
 # Add a pixel to your graph in Pixe.la
