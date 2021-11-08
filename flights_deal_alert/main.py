@@ -3,13 +3,12 @@ from data_manager import DataManager
 from flight_search import FlightSearch
 from notification_manager import NotificationManager
 
-ORIGIN_CITY_IATA = "BER" # Berlin
-
 data_manager = DataManager()
+sheet_data = data_manager.get_destination_data()
 flight_search = FlightSearch()
 notification_manager = NotificationManager()
 
-sheet_data = data_manager.get_destination_data()
+ORIGIN_CITY_IATA = "BER"
 
 if sheet_data[0]["iataCode"] == "":
     for row in sheet_data:
@@ -29,7 +28,8 @@ for destination in sheet_data:
     )
     if flight is not None and flight.price < destination["lowestPrice"]:
         notification_manager.send_sms(
-            message=f"Low price alert! Only €{flight.price} to fly from {flight.origin_city}-{flight.origin_airport} "
-                    f"to {flight.destination_city}-{flight.destination_airport}, "
-                    f"from {flight.out_date} to {flight.return_date}."
+            message=f"Low price alert! Only €{flight.price} to fly from "
+                    f"{flight.origin_city}-{flight.origin_airport} to "
+                    f"{flight.destination_city}-{flight.destination_airport}, from "
+                    f"{flight.out_date} to {flight.return_date}."
         )

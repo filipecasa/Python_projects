@@ -1,9 +1,9 @@
 from twilio.rest import Client
 
-TWILIO_SID = "your twilio sid"
-TWILIO_AUTH_TOKEN = "your twilio auth token"
-TWILIO_VIRTUAL_NUMBER = "your twilio phone number"
-TWILIO_VERIFIED_NUMBER = "your verified phone number in twilio"
+TWILIO_SID = "YOUR TWILIO ACCOUNT SID"
+TWILIO_AUTH_TOKEN = "YOUR TWILIO AUTH TOKEN"
+TWILIO_VIRTUAL_NUMBER = "YOUR TWILIO VIRTUAL NUMBER"
+TWILIO_VERIFIED_NUMBER = "YOUR TWILIO VERIFIED NUMBER"
 
 
 class NotificationManager:
@@ -18,5 +18,5 @@ class NotificationManager:
             from_=TWILIO_VIRTUAL_NUMBER,
             to=TWILIO_VERIFIED_NUMBER
         )
-        # Prints if sucessfully sent
+        # Prints if successfully sent
         print(message.sid)

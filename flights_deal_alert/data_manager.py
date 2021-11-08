@@ -1,7 +1,7 @@
 from pprint import pprint
 import requests
 
-SHEETY_PRICES_ENDPOINT = "your sheety url api"
+SHEETY_PRICES_ENDPOINT = "YOUR SHEETY PRICES ENDPOINT"
 
 
 class DataManager:
@@ -14,7 +14,7 @@ class DataManager:
         response = requests.get(url=SHEETY_PRICES_ENDPOINT)
         data = response.json()
         self.destination_data = data["prices"]
-        pprint(data)
+        # pprint(data)
 
         return self.destination_data
 
